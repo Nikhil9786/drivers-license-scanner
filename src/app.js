@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.height = video.videoHeight;
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        // const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
         const imageDataUrl = canvas.toDataURL('image/png');
 
