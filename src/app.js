@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('video');
     const fullNameElement = document.getElementById('fullName');
@@ -27,9 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('getUserMedia is not supported in this browser');
     }
-    
-    function captureImage() {
 
+    function captureImage() {
         if (typeof Tesseract === 'undefined') {
             console.error('Tesseract.js is not defined. Please make sure it is loaded.');
             return;
@@ -41,13 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.height = video.videoHeight;
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
+        // Convert the captured image to base64 data URL
         const imageDataUrl = canvas.toDataURL('image/png');
 
         // Use Tesseract.js for OCR
         Tesseract.recognize(
-            imageData,
+            imageDataUrl, // Pass the data URL instead of imageData
             'eng', // language: English
             {
                 logger: (info) => {
@@ -66,13 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function parseExtractedText(text) {
         const lines = text.split('\n');
-    
+
         // Placeholder variables to store parsed data
         let fullName = '';
         let address = '';
         let issued = '';
         let expires = '';
-    
+
         // Loop through each line and extract relevant information
         lines.forEach((line) => {
             // Check for patterns in the text and extract information accordingly
@@ -86,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 expires = line.replace('Expires:', '').trim();
             }
         });
-    
+
         // Return the parsed data as an object
         return {
             fullName,
@@ -95,13 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
             expires
         };
     }
-    
 
     function updateUI(data) {
         // Update the UI with the extracted information
         fullNameElement.textContent = `Full Name: ${data.fullName}`;
         addressElement.textContent = `Address: ${data.address}`;
-        issuedElement.textContent = `Issuance Date: ${data.issued}`;
-        expiresElement.textContent = `Expiration Date: ${data.expires}`;
+        issuedElement.textContent = `Issued: ${data.issued}`;
+        expiresElement.textContent = `Expires: ${data.expires}`;
     }
 });
